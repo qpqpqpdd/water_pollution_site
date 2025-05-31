@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>참여하기 - 우리 물, 미래</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f9ff;
+      margin: 0;
+      padding: 2rem;
+      color: #0b3d91;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1.2rem;
+      font-weight: 600;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.4rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0.8rem;
+      background: #0b3d91;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #07348f;
+    }
+    .success {
+      text-align: center;
+      color: green;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💧 오염 제보하기</h1>
+
+  <form id="reportForm">
+    <label for="user">신고자 이름 (선택)</label>
+    <input type="text" id="user" placeholder="예: 김물보호">
+
+    <label for="location">오염 위치</label>
+    <input type="text" id="location" required placeholder="예: 한강, 탄천, OO동 하천 등">
+
+    <label for="content">오염 내용</label>
+    <textarea id="content" rows="5" required placeholder="오염 상황을 자세히 적어주세요."></textarea>
+
+    <button type="submit">제보 제출</button>
+    <div class="success" id="successMsg" style="display:none;">✅ 제보가 저장되었습니다!</div>
+  </form>
+
+  <script>
+    const form = document.getElementById('reportForm');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const user = document.getElementById('user').value;
+      const location = document.getElementById('location').value;
+      const content = document.getElementById('content').value;
+
+      const newReport = { user, location, content };
+
+      const existing = JSON.parse(localStorage.getItem('reports') || '[]');
+      existing.push(newReport);
+      localStorage.setItem('reports', JSON.stringify(existing));
+
+      form.reset();
+      successMsg.style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>

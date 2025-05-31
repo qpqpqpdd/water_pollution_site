@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>실시간 수질오염 현황 - 우리 물, 미래</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+ integrity="sha256-sA+z0bh3rmP7Xj0yhYcVt1tHi7sxw2wykwo9K6Zi3EY="
+ crossorigin=""/>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f9fbff;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0b3d91;
+    padding: 1rem 2rem;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  nav .logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.8rem;
+  }
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  nav ul li a:hover, nav ul li a[aria-current="page"] {
+    color: #60a5fa;
+  }
+  nav .login-btn {
+    background: #2563eb;
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background 0.3s;
+    color: white;
+  }
+  nav .login-btn:hover {
+    background: #1d4ed8;
+  }
+  main {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 1rem auto 3rem;
+  }
+  h1 {
+    color: #0b3d91;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  #map {
+    height: 600px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  /* 반응형 */
+  @media (max-width: 768px) {
+    #map {
+      height: 400px;
+    }
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <div class="logo">우리 물, 미래</div>
+    <ul>
+      <li><a href="index.html">홈</a></li>
+      <li><a href="pollution.html">수질오염이란?</a></li>
+      <li><a href="realtime.html" aria-current="page">실시간 현황</a></li>
+      <li><a href="ai.html">AI 예측</a></li>
+      <li><a href="participate.html">참여하기</a></li>
+    </ul>
+    <a href="login.html" class="login-btn">로그인</a>
+  </nav>
+
+  <main>
+    <h1>대한민국 실시간 수질오염 현황</h1>
+    <div id="map" role="region" aria-label="대한민국 수질오염 지도"></div>
+  </main>
+
+  <footer>
+    <p>© 2025 우리 물, 미래 | 환경부 협력</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-o9N1j4pqN+6J6b44gxLAkB4Ie1mU8a1frMR7wAJZklw="
+    crossorigin=""></script>
+  <script>
+    // 지도 초기화 (대한민국 중심 좌표)
+    const map = L.map('map').setView([36.5, 127.5], 7);
+
+    // OSM 타일 레이어 추가
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // 수질오염 샘플 데이터
+    const pollutionSites = [
+      {
+        name: '한강 수계',
+        coords: [37.56, 126.97],
+        level: '양호',
+        description: '오염도 낮음, 정상 범위 내',
+        color: 'green'
+      },
+      {
+        name: '낙동강 수계',
+        coords: [35.18, 128.97],
+        level: '주의',
+        description: '중간 정도 오염, 주의 필요',
+        color: 'yellow'
+      },
+      {
+        name: '금강 수계',
+        coords: [36.45, 127.37],
+        level: '위험',
+        description: '고농도 오염, 즉각 조치 필요',
+        color: 'red'
+      }
+    ];
+
+    // 마커 추가 및 팝업 설정
+    pollutionSites.forEach(site => {
+      const marker = L.circleMarker(site.coords, {
+        radius: 12,
+        fillColor: site.color,
+        color: '#333',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      }).addTo(map);
+      marker.bindPopup(`<strong>${site.name}</strong><br/>수질 상태: ${site.level}<br/>${site.description}`);
+    });
+  </script>
+</body>
+</html>

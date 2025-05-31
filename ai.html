@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AI 수질 예측 시각화</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f4f8ff;
+      margin: 0;
+      padding: 2rem;
+      color: #0b3d91;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .chart-container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>📈 AI 예측 수질 오염 시각화</h1>
+  <div class="chart-container">
+    <canvas id="pollutionChart"></canvas>
+  </div>
+
+  <script>
+    const labels = ['6/1', '6/4', '6/7', '6/10', '6/13', '6/16', '6/19', '6/22', '6/25', '6/28'];
+    const values = [15, 18, 22, 24, 30, 28, 35, 32, 36, 40];
+
+    // 각 수치에 따라 색상 설정 (점 색상)
+    const getColor = (value) => {
+      if (value >= 30) return 'red';       // 위험
+      if (value >= 20) return 'orange';    // 주의
+      return 'blue';                       // 안전
+    };
+
+    const pointColors = values.map(v => getColor(v));
+
+    const ctx = document.getElementById('pollutionChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: '예측 오염 수치 (ppm)',
+          data: values,
+          fill: true,
+          tension: 0.3,
+          backgroundColor: 'rgba(0,0,0,0.05)',
+          borderColor: 'gray', // 기본 선 색
+          borderWidth: 2,
+          pointBackgroundColor: pointColors,
+          pointBorderColor: pointColors,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'AI 예측: 6월 한강 오염 위험 시각화',
+            font: {
+              size: 18,
+              weight: 'bold'
+            },
+            color: '#0b3d91'
+          },
+          legend: {
+            labels: {
+              color: '#0b3d91'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              afterBody: function(context) {
+                const val = context[0].parsed.y;
+                if (val >= 30) return "🚨 위험 수준! 주의 필요";
+                if (val >= 20) return "⚠️ 주의 단계";
+                return "✅ 안전";
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: '오염 수치 (ppm)',
+              color: '#0b3d91'
+            },
+            ticks: {
+              color: '#0b3d91'
+            }
+          },
+          x: {
+            ticks: {
+              color: '#0b3d91'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

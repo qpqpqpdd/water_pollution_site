@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 대시보드 - 우리 물, 미래</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f4ff;
+      margin: 0;
+      padding: 2rem;
+      color: #0b3d91;
+    }
+    h1 {
+      text-align: center;
+    }
+    .report-list {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .report-item {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+    .report-item:last-child {
+      border-bottom: none;
+    }
+    button {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    button:hover {
+      background: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚨 관리자 대시보드</h1>
+  <div class="report-list" id="reportList">
+    <p>신고 내용을 불러오는 중입니다...</p>
+  </div>
+
+<script>
+  // 관리자 인증 확인
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  if (!isAdmin) {
+    alert("관리자만 접근 가능합니다.");
+    window.location.href = 'index.html';
+  }
+
+  // 신고 데이터 불러오기
+  const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+  const reportList = document.getElementById('reportList');
+  reportList.innerHTML = '';
+
+  if (reports.length === 0) {
+    reportList.innerHTML = "<p>등록된 신고가 없습니다.</p>";
+  } else {
+    reports.forEach((report, index) => {
+      const div = document.createElement('div');
+      div.className = 'report-item';
+      div.innerHTML = `
+        <strong>신고자:</strong> ${report.user || '익명'}<br/>
+        <strong>위치:</strong> ${report.location}<br/>
+        <strong>내용:</strong> ${report.content}<br/>
+        <button onclick="deleteReport(${index})">삭제</button>
+      `;
+      reportList.appendChild(div);
+    });
+  }
+
+  function deleteReport(index) {
+    if (confirm('정말 이 신고를 삭제하시겠습니까?')) {
+      reports.splice(index, 1);
+      localStorage.setItem('reports', JSON.stringify(reports));
+      window.location.reload();
+    }
+  }
+</script>
+</body>
+</html>

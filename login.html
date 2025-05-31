@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 - 우리 물, 미래</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f4ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #0b3d91;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 1.5rem;
+      background: #0b3d91;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #07348f;
+    }
+    .note {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>🔐 로그인</h2>
+    <label for="username">아이디</label>
+    <input type="text" id="username" placeholder="아이디를 입력하세요">
+
+    <label for="password">비밀번호</label>
+    <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+
+    <button onclick="login()">로그인</button>
+
+    <div class="note">관리자 ID: <b>admin</b> / 비밀번호: <b>water2025</b></div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (username === 'admin' && password === 'water2025') {
+        localStorage.setItem('isAdmin', 'true');
+        alert("관리자로 로그인되었습니다.");
+        window.location.href = 'admin.html';
+      } else if (username === 'user' && password === '1234') {
+        localStorage.setItem('isAdmin', 'false');
+        alert("로그인 성공! 환영합니다.");
+        window.location.href = 'index.html';
+      } else {
+        alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+      }
+    }
+  </script>
+
+</body>
+</html>
